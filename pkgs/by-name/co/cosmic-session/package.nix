@@ -8,6 +8,8 @@
   stdenv,
   nixosTests,
   nix-update-script,
+  withLogind ? true,
+  withAutostart ? false,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -40,6 +42,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ just ];
 
   buildInputs = [ bash ];
+
+  buildNoDefaultFeatures = true;
+
+  buildFeatures = lib.optional withLogind "logind" ++ lib.optional withAutostart "autostart";
 
   dontUseJustBuild = true;
 
